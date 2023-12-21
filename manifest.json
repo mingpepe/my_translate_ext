@@ -12,5 +12,13 @@
       "matches": ["https://translate.google.com/*"],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "commands": {
+    "go_back": {
+      "suggested_key": {
+        "default": "Alt+Q"
+      },
+      "description": "Go back"
+    }
+  }
 }

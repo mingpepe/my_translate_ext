@@ -1,3 +1,5 @@
+let lastTabId = undefined;
+
 chrome.runtime.onInstalled.addListener(function () {
     chrome.contextMenus.create({
         title: "Translate Selection",
@@ -8,6 +10,7 @@ chrome.runtime.onInstalled.addListener(function () {
 
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
     if (info.menuItemId === "translateContextMenu") {
+        lastTabId = tab.id;
         chrome.tabs.query({}, function (tabs) {
             for (let i = 0; i < tabs.length; i++) {
                 if (tabs[i].url.toLowerCase().includes('translate.google.')) {
@@ -37,6 +40,18 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
         function focusOnGoogleTranslateTab(tabId) {
             var updateProperties = { 'active': true };
             chrome.tabs.update(tabId, updateProperties, (tab) => { });
+        }
+    }
+});
+
+chrome.commands.onCommand.addListener(function (command) {
+    if (command === "go_back") {
+        if (lastTabId) {
+            console.log('go back');
+            chrome.tabs.update(lastTabId, { active: true });
+            lastTabId = undefined;
+        } else {
+            console.log('no lastTab');
         }
     }
 });
