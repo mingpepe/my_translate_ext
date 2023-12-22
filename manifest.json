@@ -3,14 +3,23 @@
   "name": "Translate Extension",
   "version": "1.0",
   "description": "Translate selected text using Google Translate",
-  "permissions": ["contextMenus", "tabs", "activeTab"],
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "activeTab"
+  ],
   "background": {
     "service_worker": "service-worker.js"
   },
   "content_scripts": [
     {
-      "matches": ["https://translate.google.com/*", "https://translate.google.com.tw/*"],
-      "js": ["content.js"]
+      "matches": [
+        "https://translate.google.com/*",
+        "https://translate.google.com.tw/*"
+      ],
+      "js": [
+        "content.js"
+      ]
     }
   ],
   "commands": {
