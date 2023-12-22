@@ -6,6 +6,13 @@ chrome.runtime.onInstalled.addListener(function () {
         contexts: ["selection"],
         id: "translateContextMenu"
     });
+    chrome.tabs.query({}, function (tabs) {
+        for (let i = 0; i < tabs.length; i++) {
+            if (tabs[i].url.toLowerCase().includes('translate.google.')) {
+                chrome.tabs.reload(tabs[i].id);
+            }
+        }
+    });
 });
 
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
