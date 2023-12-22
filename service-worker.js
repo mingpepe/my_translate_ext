@@ -7,11 +7,11 @@ chrome.runtime.onInstalled.addListener(function () {
         id: "translateContextMenu"
     });
     chrome.tabs.query({}, function (tabs) {
-        for (let i = 0; i < tabs.length; i++) {
-            if (tabs[i].url.toLowerCase().includes('translate.google.')) {
-                chrome.tabs.reload(tabs[i].id);
+        tabs.forEach(tab => {
+            if (tab.url.toLowerCase().includes('translate.google.')) {
+                chrome.tabs.reload(tab.id);
             }
-        }
+        });
     });
 });
 
