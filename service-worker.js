@@ -1,7 +1,6 @@
 chrome.storage.local.set({ lastTabId: 0 }, function () {
     if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError);
-        return;
     }
 });
 
@@ -25,7 +24,6 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
         chrome.storage.local.set({ lastTabId: tab.id }, function () {
             if (chrome.runtime.lastError) {
                 console.error(chrome.runtime.lastError);
-                return;
             }
         });
         chrome.tabs.query({}, function (tabs) {
@@ -70,7 +68,6 @@ chrome.commands.onCommand.addListener(async function (command) {
             await chrome.storage.local.set({lastTabId: 0});
             if (chrome.runtime.lastError) {
                 console.error(chrome.runtime.lastError);
-                return;
             }
         } else {
             console.log('no lastTab');
