@@ -1,4 +1,9 @@
-let lastTabId = undefined;
+chrome.storage.local.set({ lastTabId: 0 }, function () {
+    if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        return;
+    }
+});
 
 chrome.runtime.onInstalled.addListener(function () {
     chrome.contextMenus.create({
@@ -17,7 +22,12 @@ chrome.runtime.onInstalled.addListener(function () {
 
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
     if (info.menuItemId === "translateContextMenu") {
-        lastTabId = tab.id;
+        chrome.storage.local.set({ lastTabId: tab.id }, function () {
+            if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError);
+                return;
+            }
+        });
         chrome.tabs.query({}, function (tabs) {
             for (let i = 0; i < tabs.length; i++) {
                 if (tabs[i].url.toLowerCase().includes('translate.google.')) {
@@ -51,12 +61,17 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
     }
 });
 
-chrome.commands.onCommand.addListener(function (command) {
+chrome.commands.onCommand.addListener(async function (command) {
     if (command === "go_back") {
-        if (lastTabId) {
-            console.log('go back');
-            chrome.tabs.update(lastTabId, { active: true });
-            lastTabId = undefined;
+        const obj = await chrome.storage.local.get('lastTabId');
+        if (obj.lastTabId) {
+            console.log(`go back to ${obj.lastTabId}`);
+            chrome.tabs.update(obj.lastTabId, { active: true });
+            await chrome.storage.local.set({lastTabId: 0});
+            if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError);
+                return;
+            }
         } else {
             console.log('no lastTab');
         }
